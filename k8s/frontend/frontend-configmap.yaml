@@ -5,3 +5,5 @@ metadata:
   namespace: taskapp
 data:
   API_URL: http://backend:5000
+
+# ArgoCD auto-sync test
