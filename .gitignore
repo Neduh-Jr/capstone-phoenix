@@ -2,8 +2,11 @@
 *.tfstate
 *.tfstate.*
 .terraform/
-*.tfvars
+terraform.tfvars
+*.auto.tfvars
 !*.tfvars.example
+tfplan
+*.tfplan
 crash.log
 
 # kubeconfig & cluster joins

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: taskapp
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+
+    spec:
+      containers:
+
+      - name: frontend
+
+        image: ghcr.io/ts-a-devops/taskapp-frontend:26da2b0@sha256:05a9b78302a07d572f40814b659e7fe738c9dc87d6e31a01372cad8c42d7273d
+
+        imagePullPolicy: Always
+
+        ports:
+        - containerPort: 80
+
+        envFrom:
+        - configMapRef:
+            name: frontend-config
+
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+
+          limits:
+            cpu: 250m
+            memory: 256Mi
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80

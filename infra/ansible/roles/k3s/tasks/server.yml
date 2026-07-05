@@ -1,0 +1,25 @@
+---
+- name: Install K3s server
+  shell: |
+    curl -sfL {{ k3s_install_script }} | \
+    INSTALL_K3S_VERSION={{ k3s_version }} sh -
+  args:
+    creates: /usr/local/bin/k3s
+  when: "'k3s_server' in group_names"
+
+- name: Wait for node token
+  wait_for:
+    path: /var/lib/rancher/k3s/server/node-token
+    timeout: 120
+  when: "'k3s_server' in group_names"
+
+- name: Read node token
+  command: cat /var/lib/rancher/k3s/server/node-token
+  register: k3s_node_token
+  changed_when: false
+  when: "'k3s_server' in group_names"
+
+- name: Save node token
+  set_fact:
+    cluster_token: "{{ k3s_node_token.stdout }}"
+  when: "'k3s_server' in group_names"

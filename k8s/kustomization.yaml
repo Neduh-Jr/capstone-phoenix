@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: taskapp
+
+resources:
+
+- namespace.yaml
+
+- postgres/postgres-secret.yaml
+- postgres/postgres-service.yaml
+- postgres/postgres-statefulset.yaml
+
+- backend/backend-configmap.yaml
+- backend/backend-secret.yaml
+- backend/backend-deployment.yaml
+- backend/backend-service.yaml
+
+- frontend/frontend-configmap.yaml
+- frontend/frontend-deployment.yaml
+- frontend/frontend-service.yaml
+
+- ingress/ingress.yaml
+
+- hpa/backend-hpa.yaml
+- hpa/frontend-hpa.yaml
+
+- pdb/backend-pdb.yaml
+- pdb/frontend-pdb.yaml
+
+- networkpolicy/taskapp-networkpolicy.yaml

@@ -1,0 +1,4 @@
+---
+- import_tasks: server.yml
+
+- import_tasks: worker.yml

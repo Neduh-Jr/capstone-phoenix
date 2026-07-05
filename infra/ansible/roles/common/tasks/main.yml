@@ -1,0 +1,53 @@
+---
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Upgrade packages
+  apt:
+    upgrade: dist
+
+- name: Install required packages
+  apt:
+    name:
+      - curl
+      - wget
+      - vim
+      - git
+      - unzip
+      - net-tools
+      - htop
+      - apt-transport-https
+      - ca-certificates
+    state: present
+
+- name: Disable swap
+  command: swapoff -a
+
+- name: Remove swap from fstab
+  replace:
+    path: /etc/fstab
+    regexp: '^(.*swap.*)$'
+    replace: '# \1'
+
+- name: Enable br_netfilter
+  modprobe:
+    name: br_netfilter
+    state: present
+
+- name: Enable overlay
+  modprobe:
+    name: overlay
+    state: present
+
+- name: Configure sysctl settings
+  copy:
+    dest: /etc/sysctl.d/99-kubernetes.conf
+    content: |
+      net.bridge.bridge-nf-call-iptables=1
+      net.bridge.bridge-nf-call-ip6tables=1
+      net.ipv4.ip_forward=1
+
+- name: Apply sysctl settings
+  command: sysctl --system
