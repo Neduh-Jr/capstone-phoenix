@@ -21,6 +21,8 @@ node-token
 .env.*
 !.env.example
 *secret*.yaml
+!k8s/postgres/postgres-secret.yaml
+!k8s/backend/backend-secret.yaml
 !*secret*.example.yaml
 *.pem
 *.key
