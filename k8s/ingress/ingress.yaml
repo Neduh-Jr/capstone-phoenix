@@ -3,12 +3,28 @@ kind: Ingress
 metadata:
   name: taskapp
   namespace: taskapp
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: traefik
+
+  tls:
+    - hosts:
+        - 51-21-135-133.nip.io
+      secretName: taskapp-tls
+
   rules:
     - host: 51-21-135-133.nip.io
       http:
         paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 5000
+
           - path: /
             pathType: Prefix
             backend:
